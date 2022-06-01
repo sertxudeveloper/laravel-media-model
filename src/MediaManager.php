@@ -3,6 +3,8 @@
 namespace SertxuDeveloper\Media;
 
 use Illuminate\Database\Eloquent\Model;
+use SertxuDeveloper\Media\Exceptions\FileDoesNotExistException;
+use SertxuDeveloper\Media\Exceptions\FileTooBigException;
 use SertxuDeveloper\Media\Exceptions\UnknownTypeException;
 use SertxuDeveloper\Media\Types\LocalFile;
 use SertxuDeveloper\Media\Types\RemoteFile;
@@ -33,7 +35,7 @@ class MediaManager {
     protected string $pathToFile = '';
 
     /**
-     *
+     * Attach an existing file to the media.
      *
      * @param string|UploadedFile|RemoteFile|LocalFile $file
      * @return $this
@@ -73,6 +75,12 @@ class MediaManager {
         throw new UnknownTypeException;
     }
 
+    /**
+     * Set the filename of the media
+     *
+     * @param string $filename
+     * @return $this
+     */
     public function setFilename(string $filename): self {
         $this->filename = $filename;
 
@@ -89,5 +97,23 @@ class MediaManager {
         $this->model = $model;
 
         return $this;
+    }
+
+    public function toMediaCollection(string $collection = 'default'): Media {
+
+        if (!is_file($this->pathToFile)) {
+            throw new FileDoesNotExistException;
+        }
+
+        if (filesize($this->pathToFile) > config('media.max_file_size')) {
+            throw new FileTooBigException;
+        }
+
+        $media = new $this->model ?? new Media;
+
+        $media->filename = $this->filename;
+        $media->path = $this->pathToFile;
+
+        /** @todo Attach media to model */
     }
 }
