@@ -25,27 +25,126 @@ You can install the package via composer:
 composer require sertxudeveloper/laravel-media-model
 ```
 
-You can publish and run the migrations with:
+Next, you should publish the config file and the migrations:
 
 ```bash
 php artisan vendor:publish --provider "SertxuDeveloper\Media\MediaServiceProvider"
+```
+
+After that, you can run the new migrations:
+
+```bash
 php artisan migrate
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-media-model-config"
-```
+Finally, you can start using the package!
 
 ## Usage
 
+You should modify the model that you want to attach media files to.
+
 ```php
-$media = new SertxuDeveloper\Media();
-echo $media->echoPhrase('Hello, SertxuDeveloper!');
+<?php
+
+namespace App\Models;
+
+use SertxuDeveloper\Media\HasMedia;
+use SertxuDeveloper\Media\Interfaces\MediaInteraction;
+
+class Message extends Model implements MediaInteraction
+{
+    use HasMedia;
+}
+```
+
+As you can see, the model has been modified to use the `HasMedia` trait.
+Also, the model must implement the `MediaInteraction` interface.
+
+### Separated media tables
+
+If you want to use a separated media table for each model, you should modify the model that you want to attach media files to.
+
+```php
+<?php
+
+namespace App\Models;
+
+use SertxuDeveloper\Media\HasMedia;
+use SertxuDeveloper\Media\Interfaces\MediaInteraction;
+
+class Message extends Model implements MediaInteraction
+{
+    use HasMedia;
+
+    public function getMediaTable()
+    {
+        return 'messages_media';
+    }
+}
+```
+
+The specified table needs to be created, you can create it manually or use one of the following command.
+
+```bash
+php artisan media:create-table messages_media
+```
+
+or
+
+```bash
+php artisan media:create-table messages
+```
+
+or
+
+```bash
+php artisan media:create-table "App\Models\Message"
+```
+
+### Attaching media files
+
+Once you configured the model, you can attach media files to it. For example:
+
+```php
+<?php
+
+$message = Message::find(1);
+
+$message->addMediaFromDisk('/images/image.jpg', 'public');
+```
+
+You can also attach a remote file:
+
+> This will not download the file to your server. It will only add the remote file path to the database.
+
+```php
+<?php
+
+$message = Message::find(1);
+
+$message->addMediaFromUrl('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
+```
+
+Also, you can attach a file content, this will save the file to the disk and attach it to the model.
+
+> This is useful if you get the content of a file from an external source, like as an email attachment read by a mail parser.
+
+```php
+<?php
+
+$message = Message::find(1);
+
+$message->addMediaFromContent(
+  content: file_get_contents('/tmp/tmpA3ds2'),
+  originalName: 'image.jpg',
+  toFolder: 'avatars',
+  toDisk: 'public'
+);
 ```
 
 ## Testing
+
+This package contains tests, you can run them using the following command:
 
 ```bash
 composer test
@@ -67,3 +166,6 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+<br><br>
+<p align="center">Copyright © 2022 Sertxu Developer</p>
