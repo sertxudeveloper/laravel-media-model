@@ -76,7 +76,7 @@ class Message extends Model implements MediaInteraction
 {
     use HasMedia;
 
-    public function getMediaTable()
+    public function getMediaTable(): string
     {
         return 'messages_media';
     }
@@ -105,12 +105,14 @@ php artisan media:create-table "App\Models\Message"
 
 Once you configured the model, you can attach media files to it. For example:
 
+> If you don't specify a disk, the default disk will be used.
+
 ```php
 <?php
 
 $message = Message::find(1);
 
-$message->addMediaFromDisk('/images/image.jpg', 'public');
+$message->addMediaFromDisk(path: '/images/image.jpg', disk: 'public');
 ```
 
 You can also attach a remote file:
