@@ -4,9 +4,8 @@ namespace SertxuDeveloper\Media\Types;
 
 /**
  * Class RemoteMedia
- * @package SertxuDeveloper\Media
  *
- * @property string $url
+ * @package SertxuDeveloper\Media
  */
 class RemoteFile {
 

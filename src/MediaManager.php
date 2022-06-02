@@ -3,22 +3,21 @@
 namespace SertxuDeveloper\Media;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use SertxuDeveloper\Media\Exceptions\FileDoesNotExistException;
 use SertxuDeveloper\Media\Exceptions\FileTooBigException;
+use SertxuDeveloper\Media\Exceptions\ModelNotValidException;
 use SertxuDeveloper\Media\Exceptions\UnknownTypeException;
+use SertxuDeveloper\Media\Exceptions\UploadedFileWriteException;
+use SertxuDeveloper\Media\Interfaces\MediaInteraction;
 use SertxuDeveloper\Media\Types\LocalFile;
 use SertxuDeveloper\Media\Types\RemoteFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use SertxuDeveloper\Media\Types\TemporaryFile;
 
 /**
  * Class MediaManager
  *
  * @package SertxuDeveloper\Media
- *
- * @property Model|null $model
- * @property string|UploadedFile $file
- * @property string $filename
- * @property string $pathToFile
  */
 class MediaManager {
 
@@ -26,9 +25,9 @@ class MediaManager {
     protected ?Model $model = null;
 
     /** The media file */
-    protected string|UploadedFile $file = '';
+    protected TemporaryFile|RemoteFile|LocalFile|null $file = null;
 
-    /** Original filename of the media */
+    /** Filename of the media */
     protected string $filename = '';
 
     /** The path where the media is stored */
@@ -37,23 +36,16 @@ class MediaManager {
     /**
      * Attach an existing file to the media.
      *
-     * @param string|UploadedFile|RemoteFile|LocalFile $file
+     * @param TemporaryFile|RemoteFile|LocalFile $file
      * @return $this
      * @throws UnknownTypeException
      */
-    public function setFile(string|UploadedFile|RemoteFile|LocalFile $file): self {
+    public function setFile(TemporaryFile|RemoteFile|LocalFile $file): self {
         $this->file = $file;
 
-        if (is_string($file)) {
-            $this->pathToFile = $file;
-            $this->setFilename(pathinfo($file, PATHINFO_BASENAME));
-
-            return $this;
-        }
-
-        if ($file instanceof UploadedFile) {
-            $this->pathToFile = $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename();
-            $this->setFilename($file->getClientOriginalName());
+        if ($file instanceof TemporaryFile) {
+            $this->pathToFile = $file->getPath();
+            $this->setFilename($file->getFilename());
 
             return $this;
         }
@@ -76,7 +68,7 @@ class MediaManager {
     }
 
     /**
-     * Set the filename of the media
+     * Set the filename of the media.
      *
      * @param string $filename
      * @return $this
@@ -88,7 +80,7 @@ class MediaManager {
     }
 
     /**
-     * Attach the media to a model
+     * Attach the media to a model.
      *
      * @param Model $model
      * @return $this
@@ -99,21 +91,146 @@ class MediaManager {
         return $this;
     }
 
+    /**
+     * Save the media to the media collection.
+     *
+     * @param string $collection
+     * @return Media
+     * @throws FileDoesNotExistException|FileTooBigException|ModelNotValidException|UnknownTypeException|UploadedFileWriteException
+     */
     public function toMediaCollection(string $collection = 'default'): Media {
+        if (!$this->model instanceof MediaInteraction) {
+            throw new ModelNotValidException;
+        }
 
-        if (!is_file($this->pathToFile)) {
+        if ($this->file instanceof RemoteFile) {
+            return $this->toMediaCollectionFromRemoteFile($collection);
+        }
+
+        if ($this->file instanceof TemporaryFile) {
+            return $this->toMediaCollectionFromTemporaryFile($collection);
+        }
+
+        if ($this->file instanceof LocalFile) {
+            return $this->toMediaCollectionFromLocalFile($collection);
+        }
+
+        throw new UnknownTypeException;
+    }
+
+    /**
+     * Save the local media to the media collection.
+     *
+     * @param string $collection
+     * @return Media
+     * @throws FileDoesNotExistException|FileTooBigException
+     */
+    public function toMediaCollectionFromLocalFile(string $collection = 'default'): Media {
+        /** @var Media $media */
+        $media = $this->model->getMediaModel();
+
+        $media->filename = $this->filename;
+        $media->path = $this->pathToFile;
+        $media->disk = $this->file->getDisk();
+
+        /** Check if the file exists */
+        if (!Storage::disk($media->disk)->exists($this->pathToFile)) {
             throw new FileDoesNotExistException;
         }
 
-        if (filesize($this->pathToFile) > config('media.max_file_size')) {
+        if (Storage::disk($media->disk)->size($this->pathToFile) > config('media.max_file_size')) {
             throw new FileTooBigException;
         }
 
-        $media = new $this->model ?? new Media;
+        $media->collection = $collection;
+
+        $media->mime_type = Storage::disk($media->disk)->mimeType($this->pathToFile);
+        $media->size = Storage::disk($media->disk)->size($this->pathToFile);
+
+        $this->attachMedia($media);
+
+        return $media;
+    }
+
+    /**
+     * @param Media $media
+     * @return void
+     */
+    protected function attachMedia(Media $media) {
+        if (!$this->model->exists) {
+            $this->model->prepareToAttachMedia($media);
+
+            $this->model->created(function ($model) {
+                $model->processUnattachedMedia(function (Media $media) use ($model) {
+                    $this->processMedia($model, $media);
+                });
+            });
+
+            return;
+        }
+
+        $this->processMedia($this->model, $media);
+    }
+
+    /**
+     * @param MediaInteraction $model
+     * @param Media $media
+     * @return void
+     */
+    protected function processMedia(MediaInteraction $model, Media $media): void {
+        if (!$media->getConnectionName()) {
+            $media->setConnection($model->getConnectionName());
+        }
+
+        $model->media()->save($media);
+    }
+
+    /**
+     * Save the remote media to the media collection.
+     *
+     * @param string $collection
+     * @return Media
+     */
+    protected function toMediaCollectionFromRemoteFile(string $collection): Media {
+        /** @var Media $media */
+        $media = $this->model->getMediaModel();
 
         $media->filename = $this->filename;
         $media->path = $this->pathToFile;
 
-        /** @todo Attach media to model */
+        $media->collection = $collection;
+
+        $media->mime_type = 'external';
+
+        $this->attachMedia($media);
+
+        return $media;
+    }
+
+    /**
+     * Save the temporary media to the media collection.
+     *
+     * @param string $collection
+     * @return Media
+     * @throws FileDoesNotExistException
+     * @throws FileTooBigException
+     * @throws UploadedFileWriteException
+     */
+    protected function toMediaCollectionFromTemporaryFile(string $collection): Media {
+        $destinationPath = Storage::disk($this->file->getDisk())->path($this->pathToFile);
+
+        if (filesize($this->file->getTmpPath()) > config('media.max_file_size')) {
+            throw new FileTooBigException;
+        }
+
+        // Check if the folder exists, if not create it
+        if (!is_dir(dirname($destinationPath))) {
+            mkdir(dirname($destinationPath), recursive: true);
+        }
+
+        if (!rename($this->file->getTmpPath(), $destinationPath))
+            throw UploadedFileWriteException::cannotMoveTemporaryFile($this->file->getTmpPath(), $destinationPath);
+
+        return $this->toMediaCollectionFromLocalFile($collection);
     }
 }

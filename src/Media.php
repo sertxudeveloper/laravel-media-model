@@ -2,15 +2,24 @@
 
 namespace SertxuDeveloper\Media;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * Class Media
+ *
  * @package SertxuDeveloper\Media
  *
+ * @property integer $id
+ * @property integer $model_id
+ * @property string $filename
  * @property string $path
+ * @property string $disk
+ * @property string $collection
+ * @property string $mime_type
+ * @property integer $size
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Media extends Model {
 

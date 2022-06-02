@@ -3,45 +3,131 @@
 namespace SertxuDeveloper\Media;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 use SertxuDeveloper\Media\Exceptions\InvalidUrlException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait HasMedia {
 
     protected string $media = Media::class;
 
-    protected string $mediaTable;
+    protected array $unattachedMedia = [];
 
-    public function __construct() {
-        parent::__construct();
+    /**
+     * The table associated with the media.
+     *
+     * @var string
+     */
+    protected string $mediaTable = 'media';
 
-        if ($this->mediaTable) {
-            $this->media = new $this->media;
-            $this->media->setTable($this->mediaTable);
-        }
-    }
-
-    public function media(): HasMany {
-        return $this->hasMany($this->media);
-    }
-
-    public function addMedia(string|UploadedFile $file) {
-        return app(MediaManagerFactory::class)->create($this, $file);
-    }
-
-    public function addMediaFromDisk(string $path, string $disk = null) {
-        return app(MediaManagerFactory::class)->createFromDisk($this, $path, $disk ?: config('filesystems.default'));
+    /**
+     * Save the content to the disk and attach it to the model.
+     *
+     * @param string $content
+     * @param string $originalName
+     * @param string $toFolder
+     * @param string|null $toDisk
+     * @param bool $keepOriginalName
+     * @return MediaManager
+     */
+    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
+        return app(MediaManagerFactory::class)
+            ->createFromContent($this, $content, $originalName, $toFolder, $toDisk ?: config('filesystems.default'),
+                $keepOriginalName);
     }
 
     /**
+     * Attach a media to the model from a disk.
+     *
+     * @param string $path
+     * @param string|null $disk
+     * @return MediaManager
+     */
+    public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
+        return app(MediaManagerFactory::class)
+            ->createFromDisk($this, $path, $disk ?: config('filesystems.default'));
+    }
+
+    /**
+     * Attach a media to the model from a URL.
+     *
+     * @param string $url
+     * @return MediaManager
      * @throws InvalidUrlException
      */
-    public function addMediaFromUrl(string $url) {
+    public function addMediaFromUrl(string $url): MediaManager {
         if (!Str::startsWith($url, ['http://', 'https://'])) {
             throw InvalidUrlException::doesNotStartWithProtocol($url);
         }
 
-        return app(MediaManagerFactory::class)->createFromUrl($this, $url);
+        return app(MediaManagerFactory::class)
+            ->createFromUrl($this, $url);
+    }
+
+    /**
+     * Get the model that will be used to store the media.
+     *
+     * @return Media
+     */
+    public function getMediaModel(): Media {
+        $model = new $this->media;
+        $model->setTable($this->getMediaTable());
+
+        return $model;
+    }
+
+    /**
+     * Get the media table for the relationship.
+     *
+     * @return string
+     */
+    public function getMediaTable(): string {
+        return $this->mediaTable;
+    }
+
+    /**
+     * Check if the model has defined a custom media table.
+     *
+     * @return bool
+     */
+    public function hasCustomMediaTable(): bool {
+        return $this->getMediaTable() !== $this->mediaTable;
+    }
+
+    /**
+     * Get the medias attached to the model.
+     *
+     * @return HasMany|MorphMany
+     */
+    public function media(): HasMany|MorphMany {
+        if (!$this->hasCustomMediaTable()) {
+            return $this->morphMany($this->getMediaModel(), 'model');
+        } else {
+            return $this->hasMany($this->getMediaModel(), 'model_id');
+        }
+    }
+
+    /**
+     * Prepare media for being attached once the model has been saved.
+     *
+     * @param Media $media
+     * @return void
+     */
+    public function prepareToAttachMedia(Media $media): void {
+        $this->unattachedMedia[$media->path] = $media;
+    }
+
+    /**
+     * Process the media that has been attached to the model.
+     *
+     * @param callable $callable
+     * @return void
+     */
+    public function processUnattachedMedia(callable $callable): void {
+        foreach ($this->unattachedMedia as $item) {
+            $callable($item);
+
+            unset($this->unattachedMedia[$item->path]);
+        }
     }
 }

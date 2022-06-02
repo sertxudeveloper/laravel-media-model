@@ -2,26 +2,47 @@
 
 namespace SertxuDeveloper\Media;
 
-use Illuminate\Database\Eloquent\Model;
+use SertxuDeveloper\Media\Interfaces\MediaInteraction;
 use SertxuDeveloper\Media\Types\LocalFile;
 use SertxuDeveloper\Media\Types\RemoteFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use SertxuDeveloper\Media\Types\TemporaryFile;
 
 /**
  * Class MediaManagerFactory
+ *
  * @package SertxuDeveloper\Media
  */
 class MediaManagerFactory {
 
-    static public function create(Model $model, string|UploadedFile $file): MediaManager {
+    /**
+     * Save the content to the disk and attach it to the model.
+     *
+     * @param MediaInteraction $model
+     * @param string $content
+     * @param string $originalName
+     * @param string $toFolder
+     * @param string $toDisk
+     * @param bool $keepOriginalName
+     * @return MediaManager
+     * @throws Exceptions\UploadedFileWriteException
+     */
+    static public function createFromContent(MediaInteraction $model, string $content, string $originalName, string $toFolder, string $toDisk, bool $keepOriginalName): MediaManager {
         $manager = app(MediaManager::class);
 
         return $manager
             ->setModel($model)
-            ->setFile($file);
+            ->setFile(new TemporaryFile($content, $originalName, $toFolder, $toDisk, $keepOriginalName));
     }
 
-    static public function createFromDisk(Model $model, string $path, string $disk): MediaManager {
+    /**
+     * Attach a media to the model from a disk.
+     *
+     * @param MediaInteraction $model
+     * @param string $path
+     * @param string $disk
+     * @return MediaManager
+     */
+    static public function createFromDisk(MediaInteraction $model, string $path, string $disk): MediaManager {
         $manager = app(MediaManager::class);
 
         return $manager
@@ -29,7 +50,14 @@ class MediaManagerFactory {
             ->setFile(new LocalFile($path, $disk));
     }
 
-    static public function createFromUrl(Model $model, string $url): MediaManager {
+    /**
+     * Attach a media to the model from a URL.
+     *
+     * @param MediaInteraction $model
+     * @param string $url
+     * @return MediaManager
+     */
+    static public function createFromUrl(MediaInteraction $model, string $url): MediaManager {
         $manager = app(MediaManager::class);
 
         return $manager

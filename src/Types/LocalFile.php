@@ -6,8 +6,6 @@ namespace SertxuDeveloper\Media\Types;
  * Class LocalFile
  *
  * @package SertxuDeveloper\Media
- *
- * @property string $url
  */
 class LocalFile {
 

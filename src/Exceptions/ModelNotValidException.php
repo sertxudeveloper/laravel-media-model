@@ -4,6 +4,6 @@ namespace SertxuDeveloper\Media\Exceptions;
 
 use Exception;
 
-class FileTooBigException extends Exception {
+class ModelNotValidException extends Exception {
     //
 }
