@@ -2,25 +2,11 @@
 
 namespace SertxuDeveloper\Media\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 use SertxuDeveloper\Media\MediaServiceProvider;
 
 class TestCase extends Orchestra {
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void {
-        parent::setUp();
-
-        Factory::guessFactoryNamesUsing(
-            fn(string $modelName) => 'SertxuDeveloper\\Media\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
-        );
-    }
 
     /**
      * Define environment setup.
@@ -39,9 +25,8 @@ class TestCase extends Orchestra {
      * @return void
      */
     protected function defineDatabaseMigrations(): void {
-        dd('defineDatabaseMigrations', __DIR__);
-//        $this->loadLaravelMigrations();
-//        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/tests/database/migrations');
     }
 
     /**

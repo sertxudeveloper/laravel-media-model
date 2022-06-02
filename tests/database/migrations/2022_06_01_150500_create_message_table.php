@@ -13,7 +13,7 @@ return new class extends Migration {
      * @return void
      */
     public function run(): void {
-        Schema::create('message', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->foreignIdFor(User::class);
             $table->string('subject');
@@ -29,6 +29,6 @@ return new class extends Migration {
      * @return void
      */
     public function down(): void {
-        Schema::drop('message');
+        Schema::dropIfExists('messages');
     }
 };

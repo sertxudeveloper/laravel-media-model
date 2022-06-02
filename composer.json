@@ -28,13 +28,13 @@
     },
     "autoload": {
         "psr-4": {
-            "SertxuDeveloper\\Media\\": "src",
-            "SertxuDeveloper\\Media\\Database\\Factories\\": "database/factories"
+            "SertxuDeveloper\\Media\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SertxuDeveloper\\Media\\Tests\\": "tests"
+            "SertxuDeveloper\\Media\\Tests\\": "tests",
+            "SertxuDeveloper\\Media\\Tests\\Database\\Factories\\": "tests/database/factories"
         }
     },
     "scripts": {
