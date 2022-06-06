@@ -4,12 +4,13 @@ namespace SertxuDeveloper\Media\Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use SertxuDeveloper\Media\Tests\Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Model;
+use SertxuDeveloper\Media\HasMedia;
+use SertxuDeveloper\Media\Tests\Database\Factories\NonMediaModelFactory;
 
-class User extends Authenticatable {
+class NonMediaModel extends Model {
 
-    use HasFactory;
+    use HasFactory, HasMedia;
 
     /**
      * The attributes that aren't mass assignable.
@@ -18,14 +19,6 @@ class User extends Authenticatable {
      */
     protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
 
     /**
      * Create a new factory instance for the model.
@@ -33,6 +26,6 @@ class User extends Authenticatable {
      * @return Factory
      */
     protected static function newFactory(): Factory {
-        return new UserFactory();
+        return new NonMediaModelFactory();
     }
 }

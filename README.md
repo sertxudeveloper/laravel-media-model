@@ -124,7 +124,7 @@ You can also attach a remote file:
 
 $message = Message::find(1);
 
-$message->addMediaFromUrl('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png');
+$message->addMediaFromUrl('https://www.sertxudeveloper.com/assets/logo.svg');
 ```
 
 Also, you can attach a file content, this will save the file to the disk and attach it to the model.

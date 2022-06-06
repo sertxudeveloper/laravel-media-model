@@ -4,16 +4,16 @@ namespace SertxuDeveloper\Media\Tests\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use SertxuDeveloper\Media\Tests\Models\Message;
+use SertxuDeveloper\Media\Tests\Models\NonMediaModel;
 
-class MessageFactory extends Factory {
+class NonMediaModelFactory extends Factory {
 
     /**
      * The name of the factory's corresponding model.
      *
      * @var class-string<Model>
      */
-    protected $model = Message::class;
+    protected $model = NonMediaModel::class;
 
     /**
      * Define the model's default state.
@@ -22,9 +22,7 @@ class MessageFactory extends Factory {
      */
     public function definition(): array {
         return [
-            'subject' => $this->faker->sentence,
-            'message' => $this->faker->paragraph,
+            'title' => $this->faker->sentence,
         ];
     }
 }
-

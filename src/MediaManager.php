@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use SertxuDeveloper\Media\Exceptions\FileDoesNotExistException;
 use SertxuDeveloper\Media\Exceptions\FileTooBigException;
-use SertxuDeveloper\Media\Exceptions\ModelNotValidException;
 use SertxuDeveloper\Media\Exceptions\UnknownTypeException;
 use SertxuDeveloper\Media\Exceptions\UploadedFileWriteException;
 use SertxuDeveloper\Media\Interfaces\MediaInteraction;
@@ -96,13 +95,9 @@ class MediaManager {
      *
      * @param string $collection
      * @return Media
-     * @throws FileDoesNotExistException|FileTooBigException|ModelNotValidException|UnknownTypeException|UploadedFileWriteException
+     * @throws FileDoesNotExistException|FileTooBigException|UnknownTypeException|UploadedFileWriteException
      */
     public function toMediaCollection(string $collection = 'default'): Media {
-        if (!$this->model instanceof MediaInteraction) {
-            throw new ModelNotValidException;
-        }
-
         if ($this->file instanceof RemoteFile) {
             return $this->toMediaCollectionFromRemoteFile($collection);
         }
@@ -199,8 +194,7 @@ class MediaManager {
         $media->path = $this->pathToFile;
 
         $media->collection = $collection;
-
-        $media->mime_type = 'external';
+        $media->disk = 'external';
 
         $this->attachMedia($media);
 

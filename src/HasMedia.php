@@ -103,7 +103,7 @@ trait HasMedia {
         if (!$this->hasCustomMediaTable()) {
             return $this->morphMany($this->getMediaModel(), 'model');
         } else {
-            return $this->hasMany($this->getMediaModel(), 'model_id');
+            return new HasMany($this->getMediaModel()->newQuery(), $this, 'model_id', $this->getKeyName());
         }
     }
 

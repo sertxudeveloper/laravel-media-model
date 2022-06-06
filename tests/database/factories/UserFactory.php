@@ -4,16 +4,17 @@ namespace SertxuDeveloper\Media\Tests\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use SertxuDeveloper\Media\Tests\Models\Message;
+use Illuminate\Support\Facades\Hash;
+use SertxuDeveloper\Media\Tests\Models\User;
 
-class MessageFactory extends Factory {
+class UserFactory extends Factory {
 
     /**
      * The name of the factory's corresponding model.
      *
      * @var class-string<Model>
      */
-    protected $model = Message::class;
+    protected $model = User::class;
 
     /**
      * Define the model's default state.
@@ -22,9 +23,9 @@ class MessageFactory extends Factory {
      */
     public function definition(): array {
         return [
-            'subject' => $this->faker->sentence,
-            'message' => $this->faker->paragraph,
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => Hash::make('password'),
         ];
     }
 }
-

@@ -2,9 +2,28 @@
 
 namespace SertxuDeveloper\Media\Tests;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Storage;
+use SertxuDeveloper\Media\Exceptions\FileTooBigException;
+use SertxuDeveloper\Media\Exceptions\InvalidUrlException;
 use SertxuDeveloper\Media\Tests\Models\Message;
+use SertxuDeveloper\Media\Tests\Models\MessageCustom;
+use SertxuDeveloper\Media\Tests\Models\User;
 
 class HasMediaTest extends TestCase {
+
+    public User $user;
+
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    public function setUp(): void {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
 
     /**
      * Check if it can add media from content.
@@ -12,9 +31,26 @@ class HasMediaTest extends TestCase {
      * @return void
      */
     public function test_can_add_media_from_content(): void {
-        $message = Message::factory()->create();
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
 
-        dd($message);
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $message
+            ->addMediaFromContent('<p>Hello World</p>', 'example.txt', 'messages', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('example.txt', $message->media->first()->filename);
+        $this->assertEquals('default', $message->media->first()->collection);
+        $this->assertEquals('local', $message->media->first()->disk);
+        $this->assertEquals('text/plain', $message->media->first()->mime_type);
+        Storage::disk($message->media->first()->disk)->assertExists($message->media->first()->path);
+        $this->assertEquals(strlen('<p>Hello World</p>'), $message->media->first()->size);
     }
 
     /**
@@ -23,7 +59,28 @@ class HasMediaTest extends TestCase {
      * @return void
      */
     public function test_can_add_media_from_disk(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
 
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        Storage::disk('local')->put('messages/example.txt', 'Hello World');
+
+        $message
+            ->addMediaFromDisk('messages/example.txt', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('example.txt', $message->media->first()->filename);
+        $this->assertEquals('default', $message->media->first()->collection);
+        $this->assertEquals('local', $message->media->first()->disk);
+        $this->assertEquals('text/plain', $message->media->first()->mime_type);
+        Storage::disk($message->media->first()->disk)->assertExists($message->media->first()->path);
+        $this->assertEquals(strlen('Hello World'), $message->media->first()->size);
     }
 
     /**
@@ -32,15 +89,139 @@ class HasMediaTest extends TestCase {
      * @return void
      */
     public function test_can_add_media_from_url(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
 
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $message
+            ->addMediaFromUrl('https://www.sertxudeveloper.com/assets/logo.svg')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('logo.svg', $message->media->first()->filename);
+        $this->assertEquals('default', $message->media->first()->collection);
+        $this->assertEquals('external', $message->media->first()->disk);
+        $this->assertEquals(null, $message->media->first()->mime_type);
+        $this->assertEquals(null, $message->media->first()->size);
     }
 
     /**
-     * Check if it can get the attached media.
+     * Check can add media to a model with a specific media table.
      *
      * @return void
      */
-    public function test_can_get_attached_media(): void {
+    public function test_can_add_media_to_model_with_specific_media_table(): void {
+        $message = MessageCustom::factory()->create(['user_id' => $this->user->id]);
 
+        $this->assertInstanceOf(HasMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $message
+            ->addMediaFromContent('<p>Hello World</p>', 'example.txt', 'custom', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('example.txt', $message->media->first()->filename);
+        $this->assertEquals('default', $message->media->first()->collection);
+        $this->assertEquals('local', $message->media->first()->disk);
+        $this->assertEquals('text/plain', $message->media->first()->mime_type);
+        Storage::disk($message->media->first()->disk)->assertExists($message->media->first()->path);
+        $this->assertEquals(strlen('<p>Hello World</p>'), $message->media->first()->size);
+    }
+
+    /**
+     * Check can delay media attachment until the model has been created.
+     *
+     * @return void
+     */
+    public function test_can_delay_media_attachment_until_model_has_been_created(): void {
+        $message = Message::factory()->make(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        Storage::disk('local')->put('messages/example.txt', 'Hello World');
+
+        $message
+            ->addMediaFromDisk('messages/example.txt', 'local')
+            ->toMediaCollection();
+
+        $this->assertFalse($message->exists, 'Model should not be saved yet');
+
+        $message->load('media');
+
+        $this->assertCount(0, $message->media);
+
+        $message->save();
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('example.txt', $message->media->first()->filename);
+        $this->assertEquals('default', $message->media->first()->collection);
+        $this->assertEquals('local', $message->media->first()->disk);
+        $this->assertEquals('text/plain', $message->media->first()->mime_type);
+        Storage::disk($message->media->first()->disk)->assertExists($message->media->first()->path);
+        $this->assertEquals(strlen('Hello World'), $message->media->first()->size);
+    }
+
+    /**
+     * Check cannot add media from a URL with invalid URL.
+     *
+     * @return void
+     */
+    public function test_cannot_add_media_from_invalid_url(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $this->expectException(InvalidUrlException::class);
+
+        $message
+            ->addMediaFromUrl('file://www.sertxudeveloper.com/assets/logo.svg')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(0, $message->media);
+    }
+
+    /**
+     * Check cannot upload content larger than the max allowed size.
+     *
+     * @return void
+     */
+    public function test_cannot_upload_content_larger_than_max_allowed_size(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $this->expectException(FileTooBigException::class);
+
+        $content = str_repeat('a', config('media.max_file_size') + 1);
+
+        $message
+            ->addMediaFromContent($content, 'example.txt', 'messages', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(0, $message->media);
     }
 }
