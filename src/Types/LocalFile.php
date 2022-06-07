@@ -10,7 +10,7 @@ namespace SertxuDeveloper\Media\Types;
 class LocalFile {
 
     /**
-     * Create a new RemoteMedia instance.
+     * Create a new instance.
      *
      * @param string $path
      * @param string $disk

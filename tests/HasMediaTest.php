@@ -5,6 +5,8 @@ namespace SertxuDeveloper\Media\Tests;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
+use SertxuDeveloper\Media\Exceptions\FileDoesNotExistException;
 use SertxuDeveloper\Media\Exceptions\FileTooBigException;
 use SertxuDeveloper\Media\Exceptions\InvalidUrlException;
 use SertxuDeveloper\Media\Tests\Models\Message;
@@ -39,7 +41,7 @@ class HasMediaTest extends TestCase {
         Storage::fake();
 
         $message
-            ->addMediaFromContent('<p>Hello World</p>', 'example.txt', 'messages', 'local')
+            ->addMediaFromContent('<p>Hello World</p>', 'example.txt', 'content/messages', 'local')
             ->toMediaCollection();
 
         $message->load('media');
@@ -218,6 +220,81 @@ class HasMediaTest extends TestCase {
 
         $message
             ->addMediaFromContent($content, 'example.txt', 'messages', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(0, $message->media);
+    }
+
+    /**
+     * Check TemporaryFile keeps the original name.
+     *
+     * @return void
+     */
+    public function test_it_keeps_the_original_name(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $message
+            ->addMediaFromContent('<p>Hello World</p>', 'example.txt', 'messages', 'local', true)
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(1, $message->media);
+        $this->assertEquals('example.txt', $message->media->first()->filename);
+        Storage::disk('local')->assertExists('messages/example.txt');
+    }
+
+    /**
+     * Check cannot attach local file larger than the max allowed size.
+     *
+     * @return void
+     */
+    public function test_cannot_attach_local_file_larger_than_max_allowed_size(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $this->expectException(FileTooBigException::class);
+
+        $content = str_repeat('a', config('media.max_file_size') + 1);
+        Storage::disk('local')->put('messages/example.txt', $content);
+
+        $message
+            ->addMediaFromDisk('messages/example.txt', 'local')
+            ->toMediaCollection();
+
+        $message->load('media');
+
+        $this->assertCount(0, $message->media);
+    }
+
+    /**
+     * Check cannot attach local file if it does not exist.
+     *
+     * @return void
+     */
+    public function test_cannot_attach_local_file_if_it_does_not_exist(): void {
+        $message = Message::factory()->create(['user_id' => $this->user->id]);
+
+        $this->assertInstanceOf(MorphMany::class, $message->media());
+        $this->assertCount(0, $message->media);
+
+        Storage::fake();
+
+        $this->expectException(FileDoesNotExistException::class);
+
+        $message
+            ->addMediaFromDisk('messages/example.txt', 'local')
             ->toMediaCollection();
 
         $message->load('media');

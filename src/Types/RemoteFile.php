@@ -3,14 +3,14 @@
 namespace SertxuDeveloper\Media\Types;
 
 /**
- * Class RemoteMedia
+ * Class RemoteFile
  *
  * @package SertxuDeveloper\Media
  */
 class RemoteFile {
 
     /**
-     * Create a new RemoteMedia instance.
+     * Create a new instance.
      *
      * @param string $url
      */

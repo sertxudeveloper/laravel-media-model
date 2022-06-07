@@ -22,7 +22,7 @@ class TemporaryFile {
     protected string $hashName = '';
 
     /**
-     * Create a new UploadedFile instance.
+     * Create a new instance.
      *
      * @param string $content
      * @param string $originalName
