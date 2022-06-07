@@ -105,6 +105,7 @@ php artisan media:create-table "App\Models\Message"
 
 Once you configured the model, you can attach media files to it. For example:
 
+> **Note**<br>
 > If you don't specify a disk, the default disk will be used.
 
 ```php
@@ -117,6 +118,7 @@ $message->addMediaFromDisk(path: '/images/image.jpg', disk: 'public');
 
 You can also attach a remote file:
 
+> **Note**<br>
 > This will not download the file to your server. It will only add the remote file path to the database.
 
 ```php
@@ -129,6 +131,7 @@ $message->addMediaFromUrl('https://www.sertxudeveloper.com/assets/logo.svg');
 
 Also, you can attach a file content, this will save the file to the disk and attach it to the model.
 
+> **Note**<br>
 > This is useful if you get the content of a file from an external source, like as an email attachment read by a mail parser.
 
 ```php
