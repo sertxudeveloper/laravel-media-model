@@ -3,7 +3,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sertxudeveloper/laravel-media-model.svg)](https://packagist.org/packages/sertxudeveloper/laravel-media-model)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/sertxudeveloper/laravel-media-model/run-tests?label=tests)](https://github.com/sertxudeveloper/laravel-media-model/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/sertxudeveloper/laravel-media-model/Check%20&%20fix%20styling?label=code%20style)](https://github.com/sertxudeveloper/laravel-media-model/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Codecov Test coverage](https://img.shields.io/codecov/c/github/sertxudeveloper/laravel-media-model)](https://app.codecov.io/gh/sertxudeveloper/laravel-media-model)
 [![Total Downloads](https://img.shields.io/packagist/dt/sertxudeveloper/laravel-media-model.svg)](https://packagist.org/packages/sertxudeveloper/laravel-media-model)
 
 When developing an app, you may want to attach media files to your models, such as images, videos, or documents.
