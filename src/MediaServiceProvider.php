@@ -5,8 +5,8 @@ namespace SertxuDeveloper\Media;
 use Illuminate\Support\ServiceProvider;
 use SertxuDeveloper\Media\Console\TableCreatorCommand;
 
-class MediaServiceProvider extends ServiceProvider {
-
+class MediaServiceProvider extends ServiceProvider
+{
     /**
      * Bootstrap the application services.
      *
@@ -22,7 +22,7 @@ class MediaServiceProvider extends ServiceProvider {
      * @return void
      */
     public function register(): void {
-        $this->mergeConfigFrom(__DIR__ . '/../config/media.php', 'media');
+        $this->mergeConfigFrom(__DIR__.'/../config/media.php', 'media');
 
         $this->registerCommands();
     }
@@ -47,11 +47,11 @@ class MediaServiceProvider extends ServiceProvider {
      */
     protected function registerPublishables(): void {
         $this->publishes([
-            __DIR__ . '/../config/media.php' => config_path('media.php'),
+            __DIR__.'/../config/media.php' => config_path('media.php'),
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'migrations');
     }
 }

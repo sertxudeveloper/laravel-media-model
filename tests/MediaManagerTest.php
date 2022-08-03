@@ -5,8 +5,8 @@ namespace SertxuDeveloper\Media\Tests;
 use Illuminate\Support\Carbon;
 use SertxuDeveloper\Media\Tests\Models\MessageCustom;
 
-class MediaManagerTest extends TestCase {
-
+class MediaManagerTest extends TestCase
+{
     /**
      * Check if it can create a media table using a model via the command.
      *
@@ -72,5 +72,4 @@ class MediaManagerTest extends TestCase {
                 $contents);
         });
     }
-
 }

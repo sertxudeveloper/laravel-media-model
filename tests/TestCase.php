@@ -6,13 +6,12 @@ use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 use SertxuDeveloper\Media\MediaServiceProvider;
 
-class TestCase extends Orchestra {
-
+class TestCase extends Orchestra
+{
     /**
      * Define environment setup.
      *
-     * @param Application $app
-     *
+     * @param  Application  $app
      * @return void
      */
     public function getEnvironmentSetUp($app): void {
@@ -26,15 +25,14 @@ class TestCase extends Orchestra {
      */
     protected function defineDatabaseMigrations(): void {
         $this->loadLaravelMigrations();
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     /**
      * Get package providers.
      *
-     * @param Application $app
-     *
+     * @param  Application  $app
      * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array {

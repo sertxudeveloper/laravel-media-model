@@ -7,8 +7,8 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
-class TableCreatorCommand extends Command {
-
+class TableCreatorCommand extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -38,6 +38,7 @@ class TableCreatorCommand extends Command {
      * Execute the console command.
      *
      * @return int
+     *
      * @throws FileNotFoundException
      */
     public function handle(): int {
@@ -72,8 +73,9 @@ class TableCreatorCommand extends Command {
     /**
      * Build the migration stub.
      *
-     * @param string $name
+     * @param  string  $name
      * @return string
+     *
      * @throws FileNotFoundException
      */
     protected function buildStub(string $name): string {
@@ -85,11 +87,11 @@ class TableCreatorCommand extends Command {
     /**
      * Get the destination path.
      *
-     * @param string $name
+     * @param  string  $name
      * @return string
      */
     protected function getMigrationPath(string $name): string {
-        return database_path('migrations/' . date('Y_m_d_His') . "_create_{$name}_media_table.php");
+        return database_path('migrations/'.date('Y_m_d_His')."_create_{$name}_media_table.php");
     }
 
     /**
@@ -98,14 +100,14 @@ class TableCreatorCommand extends Command {
      * @return string
      */
     protected function getStub(): string {
-        return __DIR__ . '/stubs/create_DummyModel_table.php.stub';
+        return __DIR__.'/stubs/create_DummyModel_table.php.stub';
     }
 
     /**
      * Replace the class name for the given stub.
      *
-     * @param string $stub
-     * @param string $name
+     * @param  string  $stub
+     * @param  string  $name
      * @return string
      */
     protected function replaceModel(string $stub, string $name): string {

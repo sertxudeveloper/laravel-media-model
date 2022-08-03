@@ -4,19 +4,18 @@ namespace SertxuDeveloper\Media\Types;
 
 /**
  * Class RemoteFile
- *
- * @package SertxuDeveloper\Media
  */
-class RemoteFile {
-
+class RemoteFile
+{
     /**
      * Create a new instance.
      *
-     * @param string $url
+     * @param  string  $url
      */
     public function __construct(
         protected string $url,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the media's filename.

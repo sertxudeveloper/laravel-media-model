@@ -12,8 +12,8 @@ use SertxuDeveloper\Media\Tests\Models\Message;
 use SertxuDeveloper\Media\Tests\Models\MessageCustom;
 use SertxuDeveloper\Media\Tests\Models\User;
 
-class HasMediaTest extends TestCase {
-
+class HasMediaTest extends TestCase
+{
     public User $user;
 
     /**

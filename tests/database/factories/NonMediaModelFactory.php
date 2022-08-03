@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use SertxuDeveloper\Media\Tests\Models\NonMediaModel;
 
-class NonMediaModelFactory extends Factory {
-
+class NonMediaModelFactory extends Factory
+{
     /**
      * The name of the factory's corresponding model.
      *

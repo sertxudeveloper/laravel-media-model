@@ -15,11 +15,9 @@ use SertxuDeveloper\Media\Types\TemporaryFile;
 
 /**
  * Class MediaManager
- *
- * @package SertxuDeveloper\Media
  */
-class MediaManager {
-
+class MediaManager
+{
     /** Model where the media is attached */
     protected ?Model $model = null;
 
@@ -35,8 +33,9 @@ class MediaManager {
     /**
      * Attach an existing file to the media.
      *
-     * @param TemporaryFile|RemoteFile|LocalFile $file
+     * @param  TemporaryFile|RemoteFile|LocalFile  $file
      * @return $this
+     *
      * @throws UnknownTypeException
      */
     public function setFile(TemporaryFile|RemoteFile|LocalFile $file): self {
@@ -69,7 +68,7 @@ class MediaManager {
     /**
      * Set the filename of the media.
      *
-     * @param string $filename
+     * @param  string  $filename
      * @return $this
      */
     public function setFilename(string $filename): self {
@@ -81,7 +80,7 @@ class MediaManager {
     /**
      * Attach the media to a model.
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return $this
      */
     public function setModel(Model $model): self {
@@ -93,8 +92,9 @@ class MediaManager {
     /**
      * Save the media to the media collection.
      *
-     * @param string $collection
+     * @param  string  $collection
      * @return Media
+     *
      * @throws FileDoesNotExistException|FileTooBigException|UnknownTypeException|UploadedFileWriteException
      */
     public function toMediaCollection(string $collection = 'default'): Media {
@@ -116,8 +116,9 @@ class MediaManager {
     /**
      * Save the local media to the media collection.
      *
-     * @param string $collection
+     * @param  string  $collection
      * @return Media
+     *
      * @throws FileDoesNotExistException|FileTooBigException
      */
     public function toMediaCollectionFromLocalFile(string $collection = 'default'): Media {
@@ -148,7 +149,7 @@ class MediaManager {
     }
 
     /**
-     * @param Media $media
+     * @param  Media  $media
      * @return void
      */
     protected function attachMedia(Media $media) {
@@ -168,8 +169,8 @@ class MediaManager {
     }
 
     /**
-     * @param MediaInteraction $model
-     * @param Media $media
+     * @param  MediaInteraction  $model
+     * @param  Media  $media
      * @return void
      */
     protected function processMedia(MediaInteraction $model, Media $media): void {
@@ -183,7 +184,7 @@ class MediaManager {
     /**
      * Save the remote media to the media collection.
      *
-     * @param string $collection
+     * @param  string  $collection
      * @return Media
      */
     protected function toMediaCollectionFromRemoteFile(string $collection): Media {
@@ -204,8 +205,9 @@ class MediaManager {
     /**
      * Save the temporary media to the media collection.
      *
-     * @param string $collection
+     * @param  string  $collection
      * @return Media
+     *
      * @throws FileDoesNotExistException
      * @throws FileTooBigException
      * @throws UploadedFileWriteException
@@ -222,8 +224,9 @@ class MediaManager {
             mkdir(dirname($destinationPath), recursive: true);
         }
 
-        if (!rename($this->file->getTmpPath(), $destinationPath))
+        if (!rename($this->file->getTmpPath(), $destinationPath)) {
             throw UploadedFileWriteException::cannotMoveTemporaryFile($this->file->getTmpPath(), $destinationPath);
+        }
 
         return $this->toMediaCollectionFromLocalFile($collection);
     }

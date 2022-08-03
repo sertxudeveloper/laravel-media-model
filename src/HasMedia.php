@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 use SertxuDeveloper\Media\Exceptions\InvalidUrlException;
 
-trait HasMedia {
-
+trait HasMedia
+{
     protected string $media = Media::class;
 
     protected array $unattachedMedia = [];
@@ -23,11 +23,11 @@ trait HasMedia {
     /**
      * Save the content to the disk and attach it to the model.
      *
-     * @param string $content
-     * @param string $originalName
-     * @param string $toFolder
-     * @param string|null $toDisk
-     * @param bool $keepOriginalName
+     * @param  string  $content
+     * @param  string  $originalName
+     * @param  string  $toFolder
+     * @param  string|null  $toDisk
+     * @param  bool  $keepOriginalName
      * @return MediaManager
      */
     public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
@@ -39,8 +39,8 @@ trait HasMedia {
     /**
      * Attach a media to the model from a disk.
      *
-     * @param string $path
-     * @param string|null $disk
+     * @param  string  $path
+     * @param  string|null  $disk
      * @return MediaManager
      */
     public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
@@ -51,8 +51,9 @@ trait HasMedia {
     /**
      * Attach a media to the model from a URL.
      *
-     * @param string $url
+     * @param  string  $url
      * @return MediaManager
+     *
      * @throws InvalidUrlException
      */
     public function addMediaFromUrl(string $url): MediaManager {
@@ -102,15 +103,15 @@ trait HasMedia {
     public function media(): HasMany|MorphMany {
         if (!$this->hasCustomMediaTable()) {
             return $this->morphMany($this->getMediaModel(), 'model');
-        } else {
-            return new HasMany($this->getMediaModel()->newQuery(), $this, 'model_id', $this->getKeyName());
         }
+
+        return new HasMany($this->getMediaModel()->newQuery(), $this, 'model_id', $this->getKeyName());
     }
 
     /**
      * Prepare media for being attached once the model has been saved.
      *
-     * @param Media $media
+     * @param  Media  $media
      * @return void
      */
     public function prepareToAttachMedia(Media $media): void {
@@ -120,7 +121,7 @@ trait HasMedia {
     /**
      * Process the media that has been attached to the model.
      *
-     * @param callable $callable
+     * @param  callable  $callable
      * @return void
      */
     public function processUnattachedMedia(callable $callable): void {

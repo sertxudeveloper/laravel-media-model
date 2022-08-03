@@ -9,8 +9,8 @@ use SertxuDeveloper\Media\HasMedia;
 use SertxuDeveloper\Media\Interfaces\MediaInteraction;
 use SertxuDeveloper\Media\Tests\Database\Factories\MessageCustomFactory;
 
-class MessageCustom extends Model implements MediaInteraction {
-
+class MessageCustom extends Model implements MediaInteraction
+{
     use HasFactory, HasMedia;
 
     /**
@@ -33,7 +33,7 @@ class MessageCustom extends Model implements MediaInteraction {
      * @return Factory
      */
     protected static function newFactory(): Factory {
-        return new MessageCustomFactory();
+        return new MessageCustomFactory;
     }
 
     /**

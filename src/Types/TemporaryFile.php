@@ -7,11 +7,9 @@ use SertxuDeveloper\Media\Exceptions\UploadedFileWriteException;
 
 /**
  * Class TemporaryFile
- *
- * @package SertxuDeveloper\Media
  */
-class TemporaryFile {
-
+class TemporaryFile
+{
     protected string $tmpPath = '';
 
     /**
@@ -24,11 +22,12 @@ class TemporaryFile {
     /**
      * Create a new instance.
      *
-     * @param string $content
-     * @param string $originalName
-     * @param string $toFolder
-     * @param string $toDisk
-     * @param bool $keepOriginalName
+     * @param  string  $content
+     * @param  string  $originalName
+     * @param  string  $toFolder
+     * @param  string  $toDisk
+     * @param  bool  $keepOriginalName
+     *
      * @throws UploadedFileWriteException
      */
     public function __construct(
@@ -70,10 +69,10 @@ class TemporaryFile {
      */
     public function getPath(): string {
         if ($this->keepOriginalName) {
-            return $this->toFolder . DIRECTORY_SEPARATOR . $this->getFilename();
+            return $this->toFolder.DIRECTORY_SEPARATOR.$this->getFilename();
         }
 
-        return $this->toFolder . DIRECTORY_SEPARATOR . $this->hashName();
+        return $this->toFolder.DIRECTORY_SEPARATOR.$this->hashName();
     }
 
     /**
@@ -91,9 +90,11 @@ class TemporaryFile {
      * @return string
      */
     protected function hashName(): string {
-        if ($this->hashName) return $this->hashName;
+        if ($this->hashName) {
+            return $this->hashName;
+        }
 
-        $this->hashName = Str::random(40) . '.' . pathinfo($this->originalName, PATHINFO_EXTENSION);
+        $this->hashName = Str::random(40).'.'.pathinfo($this->originalName, PATHINFO_EXTENSION);
 
         return $this->hashName;
     }

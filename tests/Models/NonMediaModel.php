@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use SertxuDeveloper\Media\HasMedia;
 use SertxuDeveloper\Media\Tests\Database\Factories\NonMediaModelFactory;
 
-class NonMediaModel extends Model {
-
+class NonMediaModel extends Model
+{
     use HasFactory, HasMedia;
 
     /**
@@ -19,13 +19,12 @@ class NonMediaModel extends Model {
      */
     protected $guarded = [];
 
-
     /**
      * Create a new factory instance for the model.
      *
      * @return Factory
      */
     protected static function newFactory(): Factory {
-        return new NonMediaModelFactory();
+        return new NonMediaModelFactory;
     }
 }

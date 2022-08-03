@@ -4,21 +4,20 @@ namespace SertxuDeveloper\Media\Types;
 
 /**
  * Class LocalFile
- *
- * @package SertxuDeveloper\Media
  */
-class LocalFile {
-
+class LocalFile
+{
     /**
      * Create a new instance.
      *
-     * @param string $path
-     * @param string $disk
+     * @param  string  $path
+     * @param  string  $disk
      */
     public function __construct(
         protected string $path,
         protected string $disk,
-    ) {}
+    ) {
+    }
 
     /**
      * Get the disk of the media.

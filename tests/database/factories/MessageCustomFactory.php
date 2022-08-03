@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use SertxuDeveloper\Media\Tests\Models\MessageCustom;
 
-class MessageCustomFactory extends Factory {
-
+class MessageCustomFactory extends Factory
+{
     /**
      * The name of the factory's corresponding model.
      *
@@ -27,4 +27,3 @@ class MessageCustomFactory extends Factory {
         ];
     }
 }
-

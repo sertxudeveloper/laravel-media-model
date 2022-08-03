@@ -8,21 +8,20 @@ use Illuminate\Support\Carbon;
 /**
  * Class Media
  *
- * @package SertxuDeveloper\Media
  *
- * @property integer $id
- * @property integer $model_id
+ * @property int $id
+ * @property int $model_id
  * @property string $filename
  * @property string $path
  * @property string $disk
  * @property string $collection
  * @property string $mime_type
- * @property integer $size
+ * @property int $size
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Media extends Model {
-
+class Media extends Model
+{
     /**
      * The table associated with the model.
      *

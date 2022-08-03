@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use SertxuDeveloper\Media\Tests\Database\Factories\UserFactory;
 
-class User extends Authenticatable {
-
+class User extends Authenticatable
+{
     use HasFactory;
 
     /**
@@ -33,6 +33,6 @@ class User extends Authenticatable {
      * @return Factory
      */
     protected static function newFactory(): Factory {
-        return new UserFactory();
+        return new UserFactory;
     }
 }

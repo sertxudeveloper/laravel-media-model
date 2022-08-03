@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 use SertxuDeveloper\Media\Tests\Models\User;
 
 return new class extends Migration {
-
     /**
      * Run the migrations.
      *
