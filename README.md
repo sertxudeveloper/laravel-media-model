@@ -1,4 +1,6 @@
 
+<p align="center"><img src="/art/socialcard.png" alt="Laravel Media Model by Sertxu Developer"></p>
+
 # Attach media files to your models
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sertxudeveloper/laravel-media-model.svg)](https://packagist.org/packages/sertxudeveloper/laravel-media-model)
@@ -15,7 +17,7 @@ You can link local media files or remote ones without needing to download them t
 
 The main difference between this package and the other ones available is that this package allows you to relate media files to your models using a custom table per model.
 
-Allowing you to manage the media tables per model instead of one unique media table for all models. 
+Allowing you to manage the media tables per model instead of one unique media table for all models.
 
 ## Installation
 
