@@ -4,7 +4,7 @@
 # Attach media files to your models
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sertxudeveloper/laravel-media-model.svg)](https://packagist.org/packages/sertxudeveloper/laravel-media-model)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/sertxudeveloper/laravel-media-model/run-tests?label=tests)](https://github.com/sertxudeveloper/laravel-media-model/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/sertxudeveloper/laravel-media-model/actions/workflows/run-tests.yml/badge.svg)](https://github.com/sertxudeveloper/laravel-media-model/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Codecov Test coverage](https://img.shields.io/codecov/c/github/sertxudeveloper/laravel-media-model)](https://app.codecov.io/gh/sertxudeveloper/laravel-media-model)
 [![Total Downloads](https://img.shields.io/packagist/dt/sertxudeveloper/laravel-media-model.svg)](https://packagist.org/packages/sertxudeveloper/laravel-media-model)
 
