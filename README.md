@@ -3,7 +3,7 @@
 
 # Attach media files to your models
 
-![](https://img.shields.io/github/v/release/sertxudeveloper/laravel-media-model) ![](https://github.com/sertxudeveloper/laravel-media-model/actions/workflows/run-tests.yml/badge.svg) ![](https://img.shields.io/github/license/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/librariesio/github/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/github/repo-size/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/packagist/dt/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/github/issues/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/packagist/php-v/sertxudeveloper/laravel-media-model)
+![](https://img.shields.io/github/v/release/sertxudeveloper/laravel-media-model) ![](https://github.com/sertxudeveloper/laravel-media-model/actions/workflows/run-tests.yml/badge.svg) ![](https://img.shields.io/github/license/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/librariesio/github/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/github/repo-size/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/packagist/dt/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/github/issues/sertxudeveloper/laravel-media-model) ![](https://img.shields.io/packagist/php-v/sertxudeveloper/laravel-media-model) [![Codecov Test coverage](https://img.shields.io/codecov/c/github/sertxudeveloper/laravel-media-model)](https://app.codecov.io/gh/sertxudeveloper/laravel-media-model)
 
 When developing an app, you may want to attach media files to your models, such as images, videos, or documents.
 With this package, you can easily attach media files to your models.
