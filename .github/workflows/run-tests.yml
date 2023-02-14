@@ -19,6 +19,8 @@ jobs:
         laravel: [9.*, 10.*]
         coverage-driver: [pcov]
         stability: [prefer-lowest, prefer-stable]
+        include:
+          - testbench: 7.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
