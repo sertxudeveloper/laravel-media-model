@@ -15,20 +15,11 @@ trait HasMedia
 
     /**
      * The table associated with the media.
-     *
-     * @var string
      */
     protected string $mediaTable = 'media';
 
     /**
      * Save the content to the disk and attach it to the model.
-     *
-     * @param  string  $content
-     * @param  string  $originalName
-     * @param  string  $toFolder
-     * @param  string|null  $toDisk
-     * @param  bool  $keepOriginalName
-     * @return MediaManager
      */
     public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
         return app(MediaManagerFactory::class)
@@ -38,10 +29,6 @@ trait HasMedia
 
     /**
      * Attach a media to the model from a disk.
-     *
-     * @param  string  $path
-     * @param  string|null  $disk
-     * @return MediaManager
      */
     public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
         return app(MediaManagerFactory::class)
@@ -51,8 +38,6 @@ trait HasMedia
     /**
      * Attach a media to the model from a URL.
      *
-     * @param  string  $url
-     * @return MediaManager
      *
      * @throws InvalidUrlException
      */
@@ -67,8 +52,6 @@ trait HasMedia
 
     /**
      * Get the model that will be used to store the media.
-     *
-     * @return Media
      */
     public function getMediaModel(): Media {
         $model = new $this->media;
@@ -79,8 +62,6 @@ trait HasMedia
 
     /**
      * Get the media table for the relationship.
-     *
-     * @return string
      */
     public function getMediaTable(): string {
         return $this->mediaTable;
@@ -88,8 +69,6 @@ trait HasMedia
 
     /**
      * Check if the model has defined a custom media table.
-     *
-     * @return bool
      */
     public function hasCustomMediaTable(): bool {
         return $this->getMediaTable() !== $this->mediaTable;
@@ -97,8 +76,6 @@ trait HasMedia
 
     /**
      * Get the medias attached to the model.
-     *
-     * @return HasMany|MorphMany
      */
     public function media(): HasMany|MorphMany {
         if (!$this->hasCustomMediaTable()) {
@@ -110,9 +87,6 @@ trait HasMedia
 
     /**
      * Prepare media for being attached once the model has been saved.
-     *
-     * @param  Media  $media
-     * @return void
      */
     public function prepareToAttachMedia(Media $media): void {
         $this->unattachedMedia[$media->path] = $media;
@@ -120,9 +94,6 @@ trait HasMedia
 
     /**
      * Process the media that has been attached to the model.
-     *
-     * @param  callable  $callable
-     * @return void
      */
     public function processUnattachedMedia(callable $callable): void {
         foreach ($this->unattachedMedia as $item) {

@@ -12,7 +12,6 @@ class TestCase extends Orchestra
      * Define environment setup.
      *
      * @param  Application  $app
-     * @return void
      */
     public function getEnvironmentSetUp($app): void {
         $app['config']->set('media.max_file_size', 0.5 * 1024 * 1024); // 0.5MB
@@ -20,8 +19,6 @@ class TestCase extends Orchestra
 
     /**
      * Define database migrations.
-     *
-     * @return void
      */
     protected function defineDatabaseMigrations(): void {
         $this->loadLaravelMigrations();

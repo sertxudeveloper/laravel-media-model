@@ -33,7 +33,6 @@ class MediaManager
     /**
      * Attach an existing file to the media.
      *
-     * @param  TemporaryFile|RemoteFile|LocalFile  $file
      * @return $this
      *
      * @throws UnknownTypeException
@@ -68,7 +67,6 @@ class MediaManager
     /**
      * Set the filename of the media.
      *
-     * @param  string  $filename
      * @return $this
      */
     public function setFilename(string $filename): self {
@@ -80,7 +78,6 @@ class MediaManager
     /**
      * Attach the media to a model.
      *
-     * @param  Model  $model
      * @return $this
      */
     public function setModel(Model $model): self {
@@ -92,8 +89,6 @@ class MediaManager
     /**
      * Save the media to the media collection.
      *
-     * @param  string  $collection
-     * @return Media
      *
      * @throws FileDoesNotExistException|FileTooBigException|UnknownTypeException|UploadedFileWriteException
      */
@@ -116,8 +111,6 @@ class MediaManager
     /**
      * Save the local media to the media collection.
      *
-     * @param  string  $collection
-     * @return Media
      *
      * @throws FileDoesNotExistException|FileTooBigException
      */
@@ -149,7 +142,6 @@ class MediaManager
     }
 
     /**
-     * @param  Media  $media
      * @return void
      */
     protected function attachMedia(Media $media) {
@@ -168,11 +160,6 @@ class MediaManager
         $this->processMedia($this->model, $media);
     }
 
-    /**
-     * @param  MediaInteraction  $model
-     * @param  Media  $media
-     * @return void
-     */
     protected function processMedia(MediaInteraction $model, Media $media): void {
         if (!$media->getConnectionName()) {
             $media->setConnection($model->getConnectionName());
@@ -183,9 +170,6 @@ class MediaManager
 
     /**
      * Save the remote media to the media collection.
-     *
-     * @param  string  $collection
-     * @return Media
      */
     protected function toMediaCollectionFromRemoteFile(string $collection): Media {
         /** @var Media $media */
@@ -205,8 +189,6 @@ class MediaManager
     /**
      * Save the temporary media to the media collection.
      *
-     * @param  string  $collection
-     * @return Media
      *
      * @throws FileDoesNotExistException
      * @throws FileTooBigException

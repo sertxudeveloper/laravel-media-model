@@ -9,8 +9,6 @@ class UploadedFileWriteExceptionTest extends TestCase
 {
     /**
      * Check that the exception is correctly thrown when the temporary file cannot be written.
-     *
-     * @return void
      */
     public function test_cannot_write_temporary_file_message(): void {
         $exception = UploadedFileWriteException::cannotWriteTemporaryFile('/tmp/foo.bar');
@@ -19,8 +17,6 @@ class UploadedFileWriteExceptionTest extends TestCase
 
     /**
      * Check that the exception is correctly thrown when the temporary file cannot be moved.
-     *
-     * @return void
      */
     public function test_cannot_move_temporary_file_message(): void {
         $exception = UploadedFileWriteException::cannotMoveTemporaryFile('/tmp/foo.bar', '/tmp/bar.foo');

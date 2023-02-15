@@ -9,8 +9,6 @@ class MediaManagerTest extends TestCase
 {
     /**
      * Check if it can create a media table using a model via the command.
-     *
-     * @return void
      */
     public function test_it_can_create_a_custom_media_table_using_model(): void {
         $this->freezeTime(function (Carbon $date) {
@@ -31,8 +29,6 @@ class MediaManagerTest extends TestCase
 
     /**
      * Check if it can create a media table using a name via the command.
-     *
-     * @return void
      */
     public function test_it_can_create_a_custom_media_table_using_name(): void {
         $this->freezeTime(function (Carbon $date) {
@@ -53,8 +49,6 @@ class MediaManagerTest extends TestCase
 
     /**
      * Check if it can create a media table using a table name via the command.
-     *
-     * @return void
      */
     public function test_it_can_create_a_custom_media_table_using_table_name(): void {
         $this->freezeTime(function (Carbon $date) {

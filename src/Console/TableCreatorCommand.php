@@ -37,7 +37,6 @@ class TableCreatorCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws FileNotFoundException
      */
@@ -73,8 +72,6 @@ class TableCreatorCommand extends Command
     /**
      * Build the migration stub.
      *
-     * @param  string  $name
-     * @return string
      *
      * @throws FileNotFoundException
      */
@@ -86,9 +83,6 @@ class TableCreatorCommand extends Command
 
     /**
      * Get the destination path.
-     *
-     * @param  string  $name
-     * @return string
      */
     protected function getMigrationPath(string $name): string {
         return database_path('migrations/'.date('Y_m_d_His')."_create_{$name}_media_table.php");
@@ -96,8 +90,6 @@ class TableCreatorCommand extends Command
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
     protected function getStub(): string {
         return __DIR__.'/stubs/create_DummyModel_table.php.stub';
@@ -105,10 +97,6 @@ class TableCreatorCommand extends Command
 
     /**
      * Replace the class name for the given stub.
-     *
-     * @param  string  $stub
-     * @param  string  $name
-     * @return string
      */
     protected function replaceModel(string $stub, string $name): string {
         return str_replace(['DummyModel', '{{ model }}', '{{model}}'], "{$name}_media", $stub);

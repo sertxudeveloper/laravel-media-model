@@ -14,19 +14,12 @@ class TemporaryFile
 
     /**
      * The cache copy of the file's hash name.
-     *
-     * @var string
      */
     protected string $hashName = '';
 
     /**
      * Create a new instance.
      *
-     * @param  string  $content
-     * @param  string  $originalName
-     * @param  string  $toFolder
-     * @param  string  $toDisk
-     * @param  bool  $keepOriginalName
      *
      * @throws UploadedFileWriteException
      */
@@ -46,8 +39,6 @@ class TemporaryFile
 
     /**
      * Get the disk of the media.
-     *
-     * @return string
      */
     public function getDisk(): string {
         return $this->toDisk;
@@ -55,8 +46,6 @@ class TemporaryFile
 
     /**
      * Get the media's filename.
-     *
-     * @return string
      */
     public function getFilename(): string {
         return $this->originalName;
@@ -64,8 +53,6 @@ class TemporaryFile
 
     /**
      * Get the path of the media.
-     *
-     * @return string
      */
     public function getPath(): string {
         if ($this->keepOriginalName) {
@@ -77,8 +64,6 @@ class TemporaryFile
 
     /**
      * Get the temporary path of the media.
-     *
-     * @return string
      */
     public function getTmpPath(): string {
         return $this->tmpPath;
@@ -86,8 +71,6 @@ class TemporaryFile
 
     /**
      * Get the hash name of the media.
-     *
-     * @return string
      */
     protected function hashName(): string {
         if ($this->hashName) {

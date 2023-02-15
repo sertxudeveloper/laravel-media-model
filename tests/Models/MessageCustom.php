@@ -29,8 +29,6 @@ class MessageCustom extends Model implements MediaInteraction
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return Factory
      */
     protected static function newFactory(): Factory {
         return new MessageCustomFactory;
@@ -38,8 +36,6 @@ class MessageCustom extends Model implements MediaInteraction
 
     /**
      * Get the media table for the relationship.
-     *
-     * @return string
      */
     public function getMediaTable(): string {
         return 'message_custom_media';

@@ -1,0 +1,11 @@
+name: Fix code styling
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compile:
+    uses: sertxudeveloper/.github/.github/workflows/php-coding-standards.yml@main
