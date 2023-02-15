@@ -15,22 +15,14 @@ trait HasMedia
 
     /**
      * The table associated with the media.
-     *
-     * @var string
      */
     protected string $mediaTable = 'media';
 
     /**
      * Save the content to the disk and attach it to the model.
-     *
-     * @param  string  $content
-     * @param  string  $originalName
-     * @param  string  $toFolder
-     * @param  string|null  $toDisk
-     * @param  bool  $keepOriginalName
-     * @return MediaManager
      */
-    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
+    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager
+    {
         return app(MediaManagerFactory::class)
             ->createFromContent($this, $content, $originalName, $toFolder, $toDisk ?: config('filesystems.default'),
                 $keepOriginalName);
@@ -38,12 +30,9 @@ trait HasMedia
 
     /**
      * Attach a media to the model from a disk.
-     *
-     * @param  string  $path
-     * @param  string|null  $disk
-     * @return MediaManager
      */
-    public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
+    public function addMediaFromDisk(string $path, string $disk = null): MediaManager
+    {
         return app(MediaManagerFactory::class)
             ->createFromDisk($this, $path, $disk ?: config('filesystems.default'));
     }
@@ -51,13 +40,12 @@ trait HasMedia
     /**
      * Attach a media to the model from a URL.
      *
-     * @param  string  $url
-     * @return MediaManager
      *
      * @throws InvalidUrlException
      */
-    public function addMediaFromUrl(string $url): MediaManager {
-        if (!Str::startsWith($url, ['http://', 'https://'])) {
+    public function addMediaFromUrl(string $url): MediaManager
+    {
+        if (! Str::startsWith($url, ['http://', 'https://'])) {
             throw InvalidUrlException::doesNotStartWithProtocol($url);
         }
 
@@ -67,10 +55,9 @@ trait HasMedia
 
     /**
      * Get the model that will be used to store the media.
-     *
-     * @return Media
      */
-    public function getMediaModel(): Media {
+    public function getMediaModel(): Media
+    {
         $model = new $this->media;
         $model->setTable($this->getMediaTable());
 
@@ -79,29 +66,26 @@ trait HasMedia
 
     /**
      * Get the media table for the relationship.
-     *
-     * @return string
      */
-    public function getMediaTable(): string {
+    public function getMediaTable(): string
+    {
         return $this->mediaTable;
     }
 
     /**
      * Check if the model has defined a custom media table.
-     *
-     * @return bool
      */
-    public function hasCustomMediaTable(): bool {
+    public function hasCustomMediaTable(): bool
+    {
         return $this->getMediaTable() !== $this->mediaTable;
     }
 
     /**
      * Get the medias attached to the model.
-     *
-     * @return HasMany|MorphMany
      */
-    public function media(): HasMany|MorphMany {
-        if (!$this->hasCustomMediaTable()) {
+    public function media(): HasMany|MorphMany
+    {
+        if (! $this->hasCustomMediaTable()) {
             return $this->morphMany($this->getMediaModel(), 'model');
         }
 
@@ -110,21 +94,17 @@ trait HasMedia
 
     /**
      * Prepare media for being attached once the model has been saved.
-     *
-     * @param  Media  $media
-     * @return void
      */
-    public function prepareToAttachMedia(Media $media): void {
+    public function prepareToAttachMedia(Media $media): void
+    {
         $this->unattachedMedia[$media->path] = $media;
     }
 
     /**
      * Process the media that has been attached to the model.
-     *
-     * @param  callable  $callable
-     * @return void
      */
-    public function processUnattachedMedia(callable $callable): void {
+    public function processUnattachedMedia(callable $callable): void
+    {
         foreach ($this->unattachedMedia as $item) {
             $callable($item);
 

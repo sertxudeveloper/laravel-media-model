@@ -9,19 +9,17 @@ class MediaServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
-    public function boot(): void {
+    public function boot(): void
+    {
         $this->registerPublishables();
     }
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register(): void {
+    public function register(): void
+    {
         $this->mergeConfigFrom(__DIR__.'/../config/media.php', 'media');
 
         $this->registerCommands();
@@ -29,10 +27,9 @@ class MediaServiceProvider extends ServiceProvider
 
     /**
      * Register the package commands.
-     *
-     * @return void
      */
-    protected function registerCommands(): void {
+    protected function registerCommands(): void
+    {
         $this->app->bind('command.media:create-table', TableCreatorCommand::class);
 
         $this->commands([
@@ -42,10 +39,9 @@ class MediaServiceProvider extends ServiceProvider
 
     /**
      * Register the publishable resources.
-     *
-     * @return void
      */
-    protected function registerPublishables(): void {
+    protected function registerPublishables(): void
+    {
         $this->publishes([
             __DIR__.'/../config/media.php' => config_path('media.php'),
         ], 'config');

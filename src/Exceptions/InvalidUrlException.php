@@ -9,7 +9,8 @@ class InvalidUrlException extends Exception
     /**
      * @param  string  $url The url that was given
      */
-    public static function doesNotStartWithProtocol(string $url): static {
+    public static function doesNotStartWithProtocol(string $url): static
+    {
         return new static("Could not add the media `$url` because it doesn't start with http:// or https://");
     }
 }

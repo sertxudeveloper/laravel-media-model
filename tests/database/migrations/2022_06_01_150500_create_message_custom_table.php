@@ -5,13 +5,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use SertxuDeveloper\Media\Tests\Models\User;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('message_custom', function (Blueprint $table) {
             $table->increments('id');
             $table->foreignIdFor(User::class);
@@ -24,10 +24,9 @@ return new class extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('message_custom');
     }
 };
