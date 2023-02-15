@@ -18,16 +18,14 @@ class RemoteFile
     /**
      * Get the media's filename.
      */
-    public function getFilename(): string
-    {
+    public function getFilename(): string {
         return basename($this->url);
     }
 
     /**
      * Get the media's URL.
      */
-    public function getUrl(): string
-    {
+    public function getUrl(): string {
         return $this->url;
     }
 }

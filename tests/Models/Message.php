@@ -23,8 +23,7 @@ class Message extends Model implements MediaInteraction
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
-    {
+    protected static function newFactory(): Factory {
         return new MessageFactory;
     }
 }

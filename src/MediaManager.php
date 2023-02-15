@@ -37,8 +37,7 @@ class MediaManager
      *
      * @throws UnknownTypeException
      */
-    public function setFile(TemporaryFile|RemoteFile|LocalFile $file): self
-    {
+    public function setFile(TemporaryFile|RemoteFile|LocalFile $file): self {
         $this->file = $file;
 
         if ($file instanceof TemporaryFile) {
@@ -70,8 +69,7 @@ class MediaManager
      *
      * @return $this
      */
-    public function setFilename(string $filename): self
-    {
+    public function setFilename(string $filename): self {
         $this->filename = $filename;
 
         return $this;
@@ -82,8 +80,7 @@ class MediaManager
      *
      * @return $this
      */
-    public function setModel(Model $model): self
-    {
+    public function setModel(Model $model): self {
         $this->model = $model;
 
         return $this;
@@ -95,8 +92,7 @@ class MediaManager
      *
      * @throws FileDoesNotExistException|FileTooBigException|UnknownTypeException|UploadedFileWriteException
      */
-    public function toMediaCollection(string $collection = 'default'): Media
-    {
+    public function toMediaCollection(string $collection = 'default'): Media {
         if ($this->file instanceof RemoteFile) {
             return $this->toMediaCollectionFromRemoteFile($collection);
         }
@@ -118,8 +114,7 @@ class MediaManager
      *
      * @throws FileDoesNotExistException|FileTooBigException
      */
-    public function toMediaCollectionFromLocalFile(string $collection = 'default'): Media
-    {
+    public function toMediaCollectionFromLocalFile(string $collection = 'default'): Media {
         /** @var Media $media */
         $media = $this->model->getMediaModel();
 
@@ -128,7 +123,7 @@ class MediaManager
         $media->disk = $this->file->getDisk();
 
         /** Check if the file exists */
-        if (! Storage::disk($media->disk)->exists($this->pathToFile)) {
+        if (!Storage::disk($media->disk)->exists($this->pathToFile)) {
             throw new FileDoesNotExistException;
         }
 
@@ -149,9 +144,8 @@ class MediaManager
     /**
      * @return void
      */
-    protected function attachMedia(Media $media)
-    {
-        if (! $this->model->exists) {
+    protected function attachMedia(Media $media) {
+        if (!$this->model->exists) {
             $this->model->prepareToAttachMedia($media);
 
             $this->model->created(function ($model) {
@@ -166,9 +160,8 @@ class MediaManager
         $this->processMedia($this->model, $media);
     }
 
-    protected function processMedia(MediaInteraction $model, Media $media): void
-    {
-        if (! $media->getConnectionName()) {
+    protected function processMedia(MediaInteraction $model, Media $media): void {
+        if (!$media->getConnectionName()) {
             $media->setConnection($model->getConnectionName());
         }
 
@@ -178,8 +171,7 @@ class MediaManager
     /**
      * Save the remote media to the media collection.
      */
-    protected function toMediaCollectionFromRemoteFile(string $collection): Media
-    {
+    protected function toMediaCollectionFromRemoteFile(string $collection): Media {
         /** @var Media $media */
         $media = $this->model->getMediaModel();
 
@@ -202,8 +194,7 @@ class MediaManager
      * @throws FileTooBigException
      * @throws UploadedFileWriteException
      */
-    protected function toMediaCollectionFromTemporaryFile(string $collection): Media
-    {
+    protected function toMediaCollectionFromTemporaryFile(string $collection): Media {
         $destinationPath = Storage::disk($this->file->getDisk())->path($this->pathToFile);
 
         if (filesize($this->file->getTmpPath()) > config('media.max_file_size')) {
@@ -211,11 +202,11 @@ class MediaManager
         }
 
         // Check if the folder exists, if not create it
-        if (! is_dir(dirname($destinationPath))) {
+        if (!is_dir(dirname($destinationPath))) {
             mkdir(dirname($destinationPath), recursive: true);
         }
 
-        if (! rename($this->file->getTmpPath(), $destinationPath)) {
+        if (!rename($this->file->getTmpPath(), $destinationPath)) {
             throw UploadedFileWriteException::cannotMoveTemporaryFile($this->file->getTmpPath(), $destinationPath);
         }
 

@@ -40,24 +40,21 @@ class TemporaryFile
     /**
      * Get the disk of the media.
      */
-    public function getDisk(): string
-    {
+    public function getDisk(): string {
         return $this->toDisk;
     }
 
     /**
      * Get the media's filename.
      */
-    public function getFilename(): string
-    {
+    public function getFilename(): string {
         return $this->originalName;
     }
 
     /**
      * Get the path of the media.
      */
-    public function getPath(): string
-    {
+    public function getPath(): string {
         if ($this->keepOriginalName) {
             return $this->toFolder.DIRECTORY_SEPARATOR.$this->getFilename();
         }
@@ -68,16 +65,14 @@ class TemporaryFile
     /**
      * Get the temporary path of the media.
      */
-    public function getTmpPath(): string
-    {
+    public function getTmpPath(): string {
         return $this->tmpPath;
     }
 
     /**
      * Get the hash name of the media.
      */
-    protected function hashName(): string
-    {
+    protected function hashName(): string {
         if ($this->hashName) {
             return $this->hashName;
         }

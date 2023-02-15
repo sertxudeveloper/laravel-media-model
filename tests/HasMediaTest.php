@@ -19,8 +19,7 @@ class HasMediaTest extends TestCase
     /**
      * Setup the test environment.
      */
-    public function setUp(): void
-    {
+    public function setUp(): void {
         parent::setUp();
         $this->user = User::factory()->create();
     }
@@ -28,8 +27,7 @@ class HasMediaTest extends TestCase
     /**
      * Check if it can add media from content.
      */
-    public function test_can_add_media_from_content(): void
-    {
+    public function test_can_add_media_from_content(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -55,8 +53,7 @@ class HasMediaTest extends TestCase
     /**
      * Check if it can add media from a stored file.
      */
-    public function test_can_add_media_from_disk(): void
-    {
+    public function test_can_add_media_from_disk(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -84,8 +81,7 @@ class HasMediaTest extends TestCase
     /**
      * Check if it can add media from a URL.
      */
-    public function test_can_add_media_from_url(): void
-    {
+    public function test_can_add_media_from_url(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -110,8 +106,7 @@ class HasMediaTest extends TestCase
     /**
      * Check can add media to a model with a specific media table.
      */
-    public function test_can_add_media_to_model_with_specific_media_table(): void
-    {
+    public function test_can_add_media_to_model_with_specific_media_table(): void {
         $message = MessageCustom::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(HasMany::class, $message->media());
@@ -137,8 +132,7 @@ class HasMediaTest extends TestCase
     /**
      * Check can delay media attachment until the model has been created.
      */
-    public function test_can_delay_media_attachment_until_model_has_been_created(): void
-    {
+    public function test_can_delay_media_attachment_until_model_has_been_created(): void {
         $message = Message::factory()->make(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -173,8 +167,7 @@ class HasMediaTest extends TestCase
     /**
      * Check cannot add media from a URL with invalid URL.
      */
-    public function test_cannot_add_media_from_invalid_url(): void
-    {
+    public function test_cannot_add_media_from_invalid_url(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -196,8 +189,7 @@ class HasMediaTest extends TestCase
     /**
      * Check cannot attach local file if it does not exist.
      */
-    public function test_cannot_attach_local_file_if_it_does_not_exist(): void
-    {
+    public function test_cannot_attach_local_file_if_it_does_not_exist(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -219,8 +211,7 @@ class HasMediaTest extends TestCase
     /**
      * Check cannot attach local file larger than the max allowed size.
      */
-    public function test_cannot_attach_local_file_larger_than_max_allowed_size(): void
-    {
+    public function test_cannot_attach_local_file_larger_than_max_allowed_size(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -245,8 +236,7 @@ class HasMediaTest extends TestCase
     /**
      * Check cannot upload content larger than the max allowed size.
      */
-    public function test_cannot_upload_content_larger_than_max_allowed_size(): void
-    {
+    public function test_cannot_upload_content_larger_than_max_allowed_size(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());
@@ -270,8 +260,7 @@ class HasMediaTest extends TestCase
     /**
      * Check TemporaryFile keeps the original name.
      */
-    public function test_it_keeps_the_original_name(): void
-    {
+    public function test_it_keeps_the_original_name(): void {
         $message = Message::factory()->create(['user_id' => $this->user->id]);
 
         $this->assertInstanceOf(MorphMany::class, $message->media());

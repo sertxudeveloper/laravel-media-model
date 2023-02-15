@@ -22,8 +22,7 @@ class NonMediaModel extends Model
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
-    {
+    protected static function newFactory(): Factory {
         return new NonMediaModelFactory;
     }
 }

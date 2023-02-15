@@ -40,11 +40,10 @@ class TableCreatorCommand extends Command
      *
      * @throws FileNotFoundException
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $class = Str::replace('/', '\\', $this->argument('name'));
 
-        if (! class_exists($class)) {
+        if (!class_exists($class)) {
             if (Str::endsWith($this->argument('name'), '_media')) {
                 $name = Str::before($this->argument('name'), '_media');
             } else {
@@ -76,8 +75,7 @@ class TableCreatorCommand extends Command
      *
      * @throws FileNotFoundException
      */
-    protected function buildStub(string $name): string
-    {
+    protected function buildStub(string $name): string {
         $stub = $this->files->get($this->getStub());
 
         return $this->replaceModel($stub, $name);
@@ -86,24 +84,21 @@ class TableCreatorCommand extends Command
     /**
      * Get the destination path.
      */
-    protected function getMigrationPath(string $name): string
-    {
+    protected function getMigrationPath(string $name): string {
         return database_path('migrations/'.date('Y_m_d_His')."_create_{$name}_media_table.php");
     }
 
     /**
      * Get the stub file for the generator.
      */
-    protected function getStub(): string
-    {
+    protected function getStub(): string {
         return __DIR__.'/stubs/create_DummyModel_table.php.stub';
     }
 
     /**
      * Replace the class name for the given stub.
      */
-    protected function replaceModel(string $stub, string $name): string
-    {
+    protected function replaceModel(string $stub, string $name): string {
         return str_replace(['DummyModel', '{{ model }}', '{{model}}'], "{$name}_media", $stub);
     }
 }

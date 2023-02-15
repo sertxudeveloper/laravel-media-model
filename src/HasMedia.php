@@ -21,8 +21,7 @@ trait HasMedia
     /**
      * Save the content to the disk and attach it to the model.
      */
-    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager
-    {
+    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
         return app(MediaManagerFactory::class)
             ->createFromContent($this, $content, $originalName, $toFolder, $toDisk ?: config('filesystems.default'),
                 $keepOriginalName);
@@ -31,8 +30,7 @@ trait HasMedia
     /**
      * Attach a media to the model from a disk.
      */
-    public function addMediaFromDisk(string $path, string $disk = null): MediaManager
-    {
+    public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
         return app(MediaManagerFactory::class)
             ->createFromDisk($this, $path, $disk ?: config('filesystems.default'));
     }
@@ -43,9 +41,8 @@ trait HasMedia
      *
      * @throws InvalidUrlException
      */
-    public function addMediaFromUrl(string $url): MediaManager
-    {
-        if (! Str::startsWith($url, ['http://', 'https://'])) {
+    public function addMediaFromUrl(string $url): MediaManager {
+        if (!Str::startsWith($url, ['http://', 'https://'])) {
             throw InvalidUrlException::doesNotStartWithProtocol($url);
         }
 
@@ -56,8 +53,7 @@ trait HasMedia
     /**
      * Get the model that will be used to store the media.
      */
-    public function getMediaModel(): Media
-    {
+    public function getMediaModel(): Media {
         $model = new $this->media;
         $model->setTable($this->getMediaTable());
 
@@ -67,25 +63,22 @@ trait HasMedia
     /**
      * Get the media table for the relationship.
      */
-    public function getMediaTable(): string
-    {
+    public function getMediaTable(): string {
         return $this->mediaTable;
     }
 
     /**
      * Check if the model has defined a custom media table.
      */
-    public function hasCustomMediaTable(): bool
-    {
+    public function hasCustomMediaTable(): bool {
         return $this->getMediaTable() !== $this->mediaTable;
     }
 
     /**
      * Get the medias attached to the model.
      */
-    public function media(): HasMany|MorphMany
-    {
-        if (! $this->hasCustomMediaTable()) {
+    public function media(): HasMany|MorphMany {
+        if (!$this->hasCustomMediaTable()) {
             return $this->morphMany($this->getMediaModel(), 'model');
         }
 
@@ -95,16 +88,14 @@ trait HasMedia
     /**
      * Prepare media for being attached once the model has been saved.
      */
-    public function prepareToAttachMedia(Media $media): void
-    {
+    public function prepareToAttachMedia(Media $media): void {
         $this->unattachedMedia[$media->path] = $media;
     }
 
     /**
      * Process the media that has been attached to the model.
      */
-    public function processUnattachedMedia(callable $callable): void
-    {
+    public function processUnattachedMedia(callable $callable): void {
         foreach ($this->unattachedMedia as $item) {
             $callable($item);
 
