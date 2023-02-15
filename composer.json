@@ -17,13 +17,12 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/contracts": "^9.5",
-        "illuminate/database": "^9.5",
-        "illuminate/support": "^9.5"
+        "illuminate/contracts": "^9.5|^10.0",
+        "illuminate/database": "^9.5|^10.0",
+        "illuminate/support": "^9.5|^10.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^6.0",
-        "orchestra/testbench": "^7.5",
+        "orchestra/testbench": "^7.5|^8.0",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
