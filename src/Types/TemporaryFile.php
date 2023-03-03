@@ -29,12 +29,15 @@ class TemporaryFile
         protected string $toFolder,
         protected string $toDisk,
         protected bool $keepOriginalName,
+        protected int $permissions = 0664,
     ) {
         $this->tmpPath = tempnam(sys_get_temp_dir(), 'tmp');
 
         if (file_put_contents($this->tmpPath, $content) === false) {
             throw UploadedFileWriteException::cannotWriteTemporaryFile($this->tmpPath);
         }
+
+        chmod($this->tmpPath, $permissions);
     }
 
     /**
