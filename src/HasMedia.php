@@ -21,7 +21,7 @@ trait HasMedia
     /**
      * Save the content to the disk and attach it to the model.
      */
-    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager {
+    public function addMediaFromContent(string $content, string $originalName, string $toFolder, ?string $toDisk = null, bool $keepOriginalName = false): MediaManager {
         return app(MediaManagerFactory::class)
             ->createFromContent($this, $content, $originalName, $toFolder, $toDisk ?: config('filesystems.default'),
                 $keepOriginalName);
@@ -30,7 +30,7 @@ trait HasMedia
     /**
      * Attach a media to the model from a disk.
      */
-    public function addMediaFromDisk(string $path, string $disk = null): MediaManager {
+    public function addMediaFromDisk(string $path, ?string $disk = null): MediaManager {
         return app(MediaManagerFactory::class)
             ->createFromDisk($this, $path, $disk ?: config('filesystems.default'));
     }

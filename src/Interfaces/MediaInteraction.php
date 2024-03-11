@@ -9,9 +9,9 @@ use SertxuDeveloper\Media\MediaManager;
 
 interface MediaInteraction
 {
-    public function addMediaFromContent(string $content, string $originalName, string $toFolder, string $toDisk = null, bool $keepOriginalName = false): MediaManager;
+    public function addMediaFromContent(string $content, string $originalName, string $toFolder, ?string $toDisk = null, bool $keepOriginalName = false): MediaManager;
 
-    public function addMediaFromDisk(string $path, string $disk = null): MediaManager;
+    public function addMediaFromDisk(string $path, ?string $disk = null): MediaManager;
 
     public function addMediaFromUrl(string $url): MediaManager;
 

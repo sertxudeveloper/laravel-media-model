@@ -11,7 +11,7 @@ class UploadedFileWriteException extends Exception
     }
 
     /**
-     * @param  string  $url The url that was given
+     * @param  string  $url  The url that was given
      */
     public static function cannotWriteTemporaryFile(string $url): static {
         return new static("Cannot write temporary file for `$url`");
