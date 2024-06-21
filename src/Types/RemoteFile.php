@@ -12,8 +12,7 @@ class RemoteFile
      */
     public function __construct(
         protected string $url,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the media's filename.

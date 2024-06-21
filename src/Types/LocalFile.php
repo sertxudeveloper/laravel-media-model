@@ -13,8 +13,7 @@ class LocalFile
     public function __construct(
         protected string $path,
         protected string $disk,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the disk of the media.
